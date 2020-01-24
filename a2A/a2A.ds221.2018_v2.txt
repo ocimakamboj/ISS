@@ -1,0 +1,76 @@
+===========================================
+DS221: INTRODUCTION TO SCALABLE SYSTEMS
+===========================================
+ASSIGNMENT 2
+POINTS: 150
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-----------------------
+PART A
+POSTED: 18 SEP, 2018
+DUE DATE: 7 OCT, 2018, 11:59PM
+-----------------------
+
+-----------------------
+2D Matrices [75 points]
+-----------------------
+
+a) You are given a matrix interface (IMatrix.h) with the following member functions.
+-- void init(int N, int M); This initializes an array that will contain N rows and M columns. The values in the initial matrix are assumed to be 0. This method must be called exactly once when creating the matrix, and subsequent calls to this method will should return a "logic_error" exception.
+-- void append(float[] row_vals); If append is called for the first time, it sets the values of row 0 to the values passed in row_vals. Else, it sets the values of the next row of the matrix since the last call to append to these values. row_vals must have exact M items in it, and you cannot append more then N rows to the matrix. If either of these are violated, you should throw an "out_of_range" exception.
+-- float get(int i, int j); This returns the value present in row i and column j of the matrix, indexed from 0. You should throw an "out_of_range" exception if the row and column values are outside the valid range of rows and columns.
+ 
+b) You will develop two different implementations for this matrix interface: using a regular 2-D array of size NxM, and a Compressed Sparse Row (CSR) representation. Both these implementations will be in a single file (MatrixImpl.cpp). [15 points]
+
+c) Define a function to LOAD a matrix from an input Tab Separated Value (TSV) file containing N+1 lines as part of Runner.cpp. The first line contains two integers separated by a tab, that have the number of rows N and number of columns M in the matrix. The remaining N lines represent the numbers in each row of the matrix, and each line has M numbers separated by tabs that represent the values present in the respective row and columns. E.g., the following is a valid input matrix file for a 3x2 matrix. 
+
+3	2
+10.91	-5.25
+21.81	0.0
+32.71	39.21
+
+You will also write the loaded matrix back to another given TSV file. Analyze the space complexity, and measure the actual space taken by different runs of this code for different matrix sizes in powers of 2 until you run out of memory. Do the analysis and the experiments match? Log the loading time console output. Discuss. [15 points]
+
+d) Define a function to ADD two matrices using the given interface as part of Runner.cpp. The code should operate on the IMatrix interface, and the same code should work work for both matrix implementations. Analyze the time complexity when both input matrices and the output matrix are arrays, and when all three are CSR. You will also write the output matrix to a given TSV file. Make sure to limit the analysis to the computation part and do NOT include the file load and write times. Log the runtime for addition to console output. Compare the analytical model with experiments of different matrix sizes and discuss the results. (This function will be a part of Runner.cpp.) [15 points]
+
+e) Define a function to MUTIPLY two matrices using the given interface as part of Runner.cpp. The code should operate on the IMatrix interface, and the same code should work work for both matrix implementations.  Analyze the time complexity when both input matrices and the output matrix are arrays, and when all three are CSR. You will also write the output matrix to a given TSV file. Make sure to limit the analysis to the computation part and do NOT include the file load and write times. Log the runtime for multiplication to console output. Compare the analytical model with experiments of different matrix sizes and discuss the results. [15 points]
+
+f) Load the adjacency list for a real-world road network [1] into the sparse matrix implementation. Assume the edges have unit weights. Perform a BFS traversal from a given source vertex and store the traversal order and depth in an STL list implementation as List<{depth, List<vid>}>. This should be part of Runner.cpp. Traverse the neighbours in ascending order of their vid's. Store the contents of the traversed list output to a file with format, "depth,vid1,vid2,...", with vertices at each depth present in sorted order. What is the time and space complexity for the traversal? Compare this with experimental results. Log the runtime for traversal to console output. What is the largest graph you can load? Discuss. [15 points]
+
+[1] http://www.dis.uniroma1.it/challenge9/download.shtml
+
+
+-----------------------
+Submission Instructions
+-----------------------
+1) Code outline for IMatrix.h, MatrixImpl.cpp and Runner.cpp is provided. Make changes to MatrixImpl and Runner alone. Make sure your code is well documented. 5% of weightage goes to following good coding practices (indenting, comments, validations, etc.)
+
+2) In addition, a Makefile and 3 test cases (small.tsv, medium.tsv, large.tsv) are given. These test cases will be different from the ones which will be used while correcting your assignments and you are expected to run your code on other sample data of your own.
+
+3) You can compile your Runner.cpp using the given Makefile. Do not change the Makefile. For executing Runner.o, the command has to be given in the following way-
+	./Runner.o load [array|csr] <input_file> <output_file>
+	./Runner.o add [array|csr] <input_file_1> <input_file_2> <output_file>
+	./Runner.o multiply [array|csr] <input_file_1> <inpout_file_2> <output_file>
+	./Runner.o bfs <input_file> <root_row_id> <output_file>
+	Example - if you want to execute multiply() on csr implementation of the matrix with input text files small1.tsv and small2.tsv, the command line will look like - 
+    ./Runner.o multiply csr small1.tsv small2.tsv mult_out.tsv
+
+4) Output format-
+	1. load() - Throw an exception if the matrix is not able to load. Otherwise save the loaded file to output file as TSV, and print a single line with the running time in the console output.
+	2. add() - Save the output matrix that has been added to the output file as TSV, and print a single line with the running time for addition in the console output.
+	3. multiply() - Save the output matrix that has been multiplied to the output file as TSV, and print a single line with the running time for multiplication in the console output.
+	4. bfs() - Save the traversed list of depth and vertices to the output file as described in question above, and print a single line with the running time for traversal in the console output.
+   You should not print anything else other than what is mentioned above, or you should throw an exception with meaningful message if there is a validation error. 
+   As the matrices contain float type values, restrict the precision of float values you print to 3, i.e., 3 values after the decimal without any leading or trailing zeros.
+
+5) You will make a folder which has the same name as your turing cluster account, say, cdsstudent. The folder should contain the following files with the exact same names:
+
+cdsstudent/
+	1. Runner.cpp
+	2. MatrixImpl.cpp
+	3. IMatrix.h - Don't make any changes. Copy it as it is provided.
+	4. Makefile - Don't make any changes. Copy it as it is provided.
+	5. Runner.o - Compiled output executable for reference. Note that your cpp file will be compiled from scratch using the Makefile, during evaluation.
+    6. cdsstudent.pdf - A PDF report containing the algorithmic analysis of your code, and the plots for expected and observed time complexity for each part of the question. Replace cdsstudent with your user name on the turing cluster. NOTE: The report and analysis carries 30% weightage for each problem.
+
+6) Tar and gzip your folder with the name cdsstudent.tar.gz, and email it to Yogesh Simmhan (simmhan@iisc.ac.in) and Manasi Tiwari (manasitiwari@iisc.ac.in) by 11:59 pm on 7th October. You will receive an acknowledgment on Oct 8.
