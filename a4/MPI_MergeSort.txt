@@ -1,0 +1,8 @@
+MPI: Merge Sort
+Implement a parallel merge sorting algorithm using a 1L integrer array using MPI. Process 0 reads the elements from an input file and distributes to the other processes. Each process then performs a local sort. Then the processes get together in groups of two and merge their locally sorted arrays into an array sorted across all the elements of the two arrays. The representatives of these groups then do the same thing and so on, until the entire sorted array is formed in process 0.
+
+Perform experiments for 8, 16, 32, 64 and 80 processes, find the times for the parallel sort in each case, and calculate the speedups wrt the time for sequential quick sort.
+
+Prepare a report with the methodology, execution times, and speedup graphs.
+
+Your relative marks for this assignment will be based on the relative times for parallel programs. For uniform comparison among all of you, the TA will be sending an input file of 1L elements.
